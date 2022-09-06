@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.my_widgets.weekview.DateTimeInterpreter;
@@ -26,7 +27,8 @@ import java.util.Locale;
  * This is a base activity which contains week view and all the codes necessary to initialize the
  * week view.
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
- * Website: <a href="http://alamkanak.github.io">alamkanak - github.io</a>
+ * Updated by Aniruddh Ramanujam on 06/09/2022
+ * Website: <a href="https://github.com/Aniruddh-0701/Android_Week_View_Sample_App">Android Week View Sample App</a>
  */
 public abstract class BaseActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener, WeekView.EmptyViewClickListener, WeekView.AddEventClickListener, WeekView.DropListener {
     private static final int TYPE_DAY_VIEW = 1;
@@ -40,12 +42,12 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        TextView draggableView = (TextView) findViewById(R.id.draggable_view);
+        TextView draggableView = findViewById(R.id.draggable_view);
         draggableView.setOnLongClickListener(new DragTapListener());
 
 
         // Get a reference for the week view in the layout.
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+        mWeekView = findViewById(R.id.weekView);
 
         // Show a toast message about the touched event.
         mWeekView.setOnEventClickListener(this);
@@ -70,20 +72,20 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         mWeekView.setDropListener(this);
 
         // Set minDate
-        /*Calendar minDate = Calendar.getInstance();
-        minDate.set(Calendar.DAY_OF_MONTH, 1);
-        minDate.add(Calendar.MONTH, 1);
-        mWeekView.setMinDate(minDate);
-
-        // Set maxDate
-        Calendar maxDate = Calendar.getInstance();
-        maxDate.add(Calendar.MONTH, 1);
-        maxDate.set(Calendar.DAY_OF_MONTH, 10);
-        mWeekView.setMaxDate(maxDate);
-
-        Calendar calendar = (Calendar) maxDate.clone();
-        calendar.add(Calendar.DATE, -2);
-        mWeekView.goToDate(calendar);*/
+        // Calendar minDate = Calendar.getInstance();
+        // minDate.set(Calendar.DAY_OF_MONTH, 1);
+        // minDate.add(Calendar.MONTH, 1);
+        // mWeekView.setMinDate(minDate);
+        //
+        // // Set maxDate
+        // Calendar maxDate = Calendar.getInstance();
+        // maxDate.add(Calendar.MONTH, 1);
+        // maxDate.set(Calendar.DAY_OF_MONTH, 10);
+        // mWeekView.setMaxDate(maxDate);
+        //
+        // Calendar calendar = (Calendar) maxDate.clone();
+        // calendar.add(Calendar.DATE, -2);
+        // mWeekView.goToDate(calendar);
 
         //mWeekView.setAutoLimitTime(true);
         //mWeekView.setLimitTime(4, 16);
@@ -96,16 +98,17 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         setupDateTimeInterpreter(false);
     }
 
+    @SuppressWarnings({"CommentedOutCode"})
     @Override
     protected void onResume() {
         super.onResume();
-        /*mWeekView.setShowDistinctPastFutureColor(true);
         mWeekView.setShowDistinctWeekendColor(true);
-        mWeekView.setFutureBackgroundColor(Color.rgb(24,85,96));
-        mWeekView.setFutureWeekendBackgroundColor(Color.rgb(255,0,0));
-        mWeekView.setPastBackgroundColor(Color.rgb(85,189,200));
-        mWeekView.setPastWeekendBackgroundColor(Color.argb(50, 0,255,0));
-        */
+
+// mWeekView.setShowDistinctPastFutureColor(true);
+// mWeekView.setFutureBackgroundColor(Color.rgb(24, 85, 96));
+// mWeekView.setFutureWeekendBackgroundColor(Color.rgb(255, 0, 0));
+// mWeekView.setPastBackgroundColor(Color.rgb(85, 189, 200));
+// mWeekView.setPastWeekendBackgroundColor(Color.argb(50, 0, 255, 0));
     }
 
     private static final class DragTapListener implements View.OnLongClickListener {
@@ -119,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -128,46 +131,45 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         setupDateTimeInterpreter(id == R.id.action_week_view);
-        switch (id) {
-            case R.id.action_today:
-                mWeekView.goToToday();
-                return true;
-            case R.id.action_day_view:
-                if (mWeekViewType != TYPE_DAY_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(1);
+        if (id == R.id.action_today) {
+            mWeekView.goToToday();
+            return true;
+        } else if (id == R.id.action_day_view) {
+            if (mWeekViewType != TYPE_DAY_VIEW) {
+                item.setChecked(!item.isChecked());
+                mWeekViewType = TYPE_DAY_VIEW;
+                mWeekView.setNumberOfVisibleDays(1);
 
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
-                return true;
-            case R.id.action_three_day_view:
-                if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_THREE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(3);
+                // Lets change some dimensions to best fit the view.
+                mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
+                mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+            }
+            return true;
+        } else if (id == R.id.action_three_day_view) {
+            if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
+                item.setChecked(!item.isChecked());
+                mWeekViewType = TYPE_THREE_DAY_VIEW;
+                mWeekView.setNumberOfVisibleDays(3);
 
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
-                return true;
-            case R.id.action_week_view:
-                if (mWeekViewType != TYPE_WEEK_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_WEEK_VIEW;
-                    mWeekView.setNumberOfVisibleDays(7);
+                // Lets change some dimensions to best fit the view.
+                mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
+                mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+                mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
+            }
+            return true;
+        } else if (id == R.id.action_week_view) {
+            if (mWeekViewType != TYPE_WEEK_VIEW) {
+                item.setChecked(!item.isChecked());
+                mWeekViewType = TYPE_WEEK_VIEW;
+                mWeekView.setNumberOfVisibleDays(7);
 
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-                }
-                return true;
+                // Lets change some dimensions to best fit the view.
+                mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
+                mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
+                mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
+            }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -197,7 +199,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
 
             @Override
             public String interpretTime(int hour, int minutes) {
-                String strMinutes = String.format("%02d", minutes);
+                String strMinutes = String.format(Locale.getDefault(), "%02d", minutes);
                 if (hour > 11) {
                     return (hour - 12) + ":" + strMinutes + " PM";
                 } else {
@@ -212,7 +214,9 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     }
 
     protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
+        return String.format(Locale.getDefault(), "Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY),
+                time.get(Calendar.MINUTE),
+                time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
     }
 
     @Override

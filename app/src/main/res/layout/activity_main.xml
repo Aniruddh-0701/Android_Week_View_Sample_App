@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:background="#fff">
+    android:background="#fff"
+    tools:ignore="Overdraw">
 
     <Button
         android:id="@+id/buttonBasic"

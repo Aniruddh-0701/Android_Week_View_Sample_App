@@ -21,6 +21,7 @@ import retrofit2.Retrofit;
  * An example of how events can be fetched from network and be displayed on the week view.
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
  * Modified by Aniruddh Ramanujam on 31/08/2022
+ * Website: <a href="https://github.com/Aniruddh-0701/Android_Week_View_Sample_App">Android Week View Sample App</a>
  */
 public class AsynchronousActivity extends BaseActivity implements Callback<List<Event>> {
 
@@ -57,11 +58,13 @@ public class AsynchronousActivity extends BaseActivity implements Callback<List<
      * @param month The month.
      * @return True if the event matches the year and month.
      */
+    @SuppressWarnings("MagicConstant")
     private boolean eventMatches(WeekViewEvent event, int year, int month) {
-        if (event.getStartTime().get(Calendar.YEAR) == year)
-            if (event.getStartTime().get(Calendar.MONTH) == month - 1) return true;
-        if (event.getEndTime().get(Calendar.YEAR) == year)
-            return event.getEndTime().get(Calendar.MONTH) == month - 1;
+            if (event.getStartTime().get(Calendar.YEAR) == year)
+                if (event.getStartTime().get(Calendar.MONTH) == month - 1) return true;
+            if (event.getEndTime().get(Calendar.YEAR) == year)
+                return event.getEndTime().get(Calendar.MONTH) == month - 1;
+
         return false;
     }
 

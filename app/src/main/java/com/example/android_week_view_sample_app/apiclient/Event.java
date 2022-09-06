@@ -15,8 +15,10 @@ import java.util.Date;
 /**
  * An event model that was built for automatic serialization from json to object.
  * Created by Raquib-ul-Alam Kanak on 1/3/16.
- * Website: http://alamkanak.github.io
+ * Updated By Aniruddh Ramanujam on 06/09/2022
+ * Website: <a href="https://github.com/Aniruddh-0701/Android_Week_View_Sample_App">Android Week View Sample App</a>
  */
+@SuppressWarnings("unused")
 public class Event {
 
     @Expose
@@ -96,11 +98,16 @@ public class Event {
         // Initialize start and end time.
         Calendar now = Calendar.getInstance();
         Calendar startTime = (Calendar) now.clone();
+
+        assert start != null;
         startTime.setTimeInMillis(start.getTime());
+
         startTime.set(Calendar.YEAR, now.get(Calendar.YEAR));
         startTime.set(Calendar.MONTH, now.get(Calendar.MONTH));
         startTime.set(Calendar.DAY_OF_MONTH, getDayOfMonth());
         Calendar endTime = (Calendar) startTime.clone();
+
+        assert end != null;
         endTime.setTimeInMillis(end.getTime());
         endTime.set(Calendar.YEAR, startTime.get(Calendar.YEAR));
         endTime.set(Calendar.MONTH, startTime.get(Calendar.MONTH));
