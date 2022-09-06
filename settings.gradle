@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Android_Week_View _Sample_App"
+rootProject.name = "Android_Week_View_Sample_App"
 include ':app'
